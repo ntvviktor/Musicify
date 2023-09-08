@@ -11,5 +11,5 @@ This project use svelte for the frontend and Golang for backend
 3. Then in the frontend, fetch chunks of audio data in byte-range specified at the request headers.
 
 ### Inspiration
-How Spotify streams most of their songs is extremely inspirational to me. Hence I want to learn and similate this particular
+How Spotify streams most of their songs is extremely inspirational to me. Hence I want to learn and simulate this particular
 function to discover.
