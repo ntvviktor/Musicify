@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011" profiles="urn:mpeg:dash:profile:isoff-live:2011" minBufferTime="PT10.00S" mediaPresentationDuration="PT2M36.116S" type="static">
+  <!-- Created with Bento4 mp4-dash.py, VERSION=2.0.0-640 -->
+  <Period>
+    <!-- Audio -->
+    <AdaptationSet mimeType="audio/mp4" startWithSAP="1" segmentAlignment="true">
+      <Representation id="audio-und-mp4a.40.2" codecs="mp4a.40.2" bandwidth="257586" audioSamplingRate="48000">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:mpegB:cicp:ChannelConfiguration" value="2"/>
+        <SegmentList timescale="1000" duration="9999">
+          <Initialization sourceURL="music_frag.mp4" range="32-623"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="624-322778"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="322779-644246"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="644247-966684"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="966685-1288800"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="1288801-1610943"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="1610944-1932319"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="1932320-2254830"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="2254831-2576644"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="2576645-2898642"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="2898643-3220267"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="3220268-3542399"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="3542400-3864750"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="3864751-4186724"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="4186725-4508197"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="4508198-4830197"/>
+          <SegmentURL media="music_frag.mp4" mediaRange="4830198-5028746"/>
+        </SegmentList>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>
