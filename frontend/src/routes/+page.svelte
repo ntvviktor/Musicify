@@ -1,11 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import { browser } from '$app/environment'
    
   import AudioPlayer from "../components/AudioPlayer.svelte";
-  import ProgressBar from "../components/ProgressBar.svelte";
-  import PlayButton from "../components/PlayButton.svelte";
-  import Controls from "../components/Controls.svelte";
 
   /**
    * @type {any}
@@ -15,7 +11,7 @@
   onMount(async() => {
     // mediaSource = new MediaSource();
     // startup();
-    const res = await fetch("http://127.0.0.1:3000/metadata")
+    const res = await fetch("http://127.0.0.1:3000/metadata");
     const content = await res.json();
     metadata = content;
   })

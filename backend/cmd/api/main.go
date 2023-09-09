@@ -60,8 +60,8 @@ func handleInit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "application/octet-stream")
-	contentType := fmt.Sprintf("bytes %d-%d//%d", start, end, fileInfo.Size())
-	w.Header().Set("Content-Range", contentType)
+	contentRange := fmt.Sprintf("bytes %d-%d/%d", start, end, fileInfo.Size())
+	w.Header().Set("Content-Range", contentRange)
 	io.CopyN(w, bytes.NewReader(buffer), int64(n))
 }
 
@@ -108,8 +108,8 @@ func handleSong(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "application/octet-stream")
-	contentType := fmt.Sprintf("bytes %d-%d//%d", start, end, fileInfo.Size())
-	w.Header().Set("Content-Range", contentType)
+	contentRange := fmt.Sprintf("bytes %d-%d/%d", start, end, fileInfo.Size())
+	w.Header().Set("Content-Range", contentRange)
 	io.CopyN(w, bytes.NewReader(buffer), int64(n))
 }
 

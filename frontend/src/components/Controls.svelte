@@ -13,7 +13,7 @@
   const whilePlaying = () => {
     seekSlider.value = Math.floor(audio.currentTime);
     audioPlayerContainer.style.setProperty(
-      "--seek-before-width",
+      "--buffered-width",
       `${(seekSlider.value / seekSlider.max) * 100}%`
     );
     raf = requestAnimationFrame(whilePlaying);
@@ -21,7 +21,7 @@
 
   const showRangeProgress = (rangeInput) => {
     if (rangeInput === seekSlider) {
-      audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%')
+      audioPlayerContainer.style.setProperty('--buffered-width', rangeInput.value / rangeInput.max * 100 + '%')
     }
   };
   function movePosition(e) {
@@ -39,24 +39,23 @@
   }
 
   const displayBufferedAmount = () => {
-    const bufferedAmount = Math.floor(
-      audio.buffered.end(audio.buffered.length - 1)
-    );
+    console.log(audio.buffered.end);
+    const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
     audioPlayerContainer.style.setProperty(
       "--buffered-width",
       `${(bufferedAmount / seekSlider.max) * 100}%`
     );
   };
-  audio.addEventListener("progress", displayBufferedAmount);
   onMount(()=> {
-    if (audio.readyState > 0) {
-        displayBufferedAmount();
-    } else {
-        audio.addEventListener('loadedmetadata', () => {
-            displayBufferedAmount();
-        });
-    }
+    // if (audio.readyState > 0) {
+    //   displayBufferedAmount();
+    // } else {
+    //   audio.addEventListener('loadedmetadata', () => {
+    //     displayBufferedAmount();
+    //   });
+    // }
   })
+  audio.addEventListener("progress", whilePlaying);
 </script>
 
 <div>
@@ -116,7 +115,7 @@
     content: "";
     top: 8px;
     left: 0;
-    width: var(--seek-before-width);
+    width: 100%;
     height: 3px;
     background-color: #007db5;
     cursor: pointer;
