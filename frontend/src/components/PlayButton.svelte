@@ -1,22 +1,16 @@
 <script>
     import Icon from '@iconify/svelte'
     import { audioPlayer, isPlaying} from '$lib/data';
-
-    // export let controls = false;
-    
     function playAudio() {
         //@ts-ignore
         $audioPlayer.play();
         $isPlaying = true;
     }
-    
     function pauseAudio() {
         //@ts-ignore
         $audioPlayer.pause();
         $isPlaying = false;
     }
-
-
 </script>
 {#if $isPlaying === false}
 <button on:click={playAudio} id="play">

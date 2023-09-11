@@ -2,7 +2,7 @@
   // @ts-nocheck
   import PlayButton from "./PlayButton.svelte";
   import { format } from "$lib/utilities";
-  import { onMount } from "svelte";
+  import { audioPlayer } from "$lib/data";
   export let audio;
   export let duration = 0;
   export let currentTime = 0;
@@ -32,29 +32,12 @@
   }
 
   function updatePosition() {
-    audio.currentTime = seekSlider.value;
+    $audioPlayer.currentTime = seekSlider.value;
     if (!audio.paused) {
       requestAnimationFrame(whilePlaying);
     }
   }
 
-  const displayBufferedAmount = () => {
-    console.log(audio.buffered.end);
-    const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
-    audioPlayerContainer.style.setProperty(
-      "--buffered-width",
-      `${(bufferedAmount / seekSlider.max) * 100}%`
-    );
-  };
-  onMount(()=> {
-    // if (audio.readyState > 0) {
-    //   displayBufferedAmount();
-    // } else {
-    //   audio.addEventListener('loadedmetadata', () => {
-    //     displayBufferedAmount();
-    //   });
-    // }
-  })
   audio.addEventListener("progress", whilePlaying);
 </script>
 
@@ -71,6 +54,7 @@
           max={Math.floor(duration)}
           on:input={movePosition}
           on:change={updatePosition}
+          step=0.01
         />
       </div>
     </div>

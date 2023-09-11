@@ -1,8 +1,6 @@
 <script>
   import { onMount } from "svelte";
-   
   import AudioPlayer from "../components/AudioPlayer.svelte";
-
   /**
    * @type {any}
    */
@@ -15,14 +13,11 @@
     const content = await res.json();
     metadata = content;
   })
- 
-
-
 </script>
 
 <main class="main">
   {#if metadata}
-  <AudioPlayer metadata={metadata}/>
+    <AudioPlayer metadata={metadata}/>
   {/if}
 </main>
 

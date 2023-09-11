@@ -9,11 +9,10 @@
   let paused = true;
   let volume = 0.5;
 
-  // @ts-ignore
+  /**
+   * @type {{ SegmentURL: string | any[]; Initialization: { Range: any; }; }}
+   */
   export let metadata;
-
-  console.log(metadata);
-
   /**
    * @type {MediaSource}
    */
@@ -22,13 +21,13 @@
    * @type {SourceBuffer}
    */
   let sourceBuffer_audio;
-
   let totalSegments = metadata.SegmentURL.length;
-  // @ts-ignore
+  /**
+   * @type {boolean[]}
+   */
   let requestedSegments = [];
   let segmentDuration = 0;
 
-  // @ts-ignore
   // @ts-ignore
   let assetURL = "http://127.0.0.1:3000/music/song1";
 
@@ -60,15 +59,6 @@
     const buf = await res.arrayBuffer();
     sourceBuffer_audio.appendBuffer(buf);
 
-    // Get the file length to subdivide the video
-    // const contentRange = res.headers.get("Content-Range");
-    // const rangeArr = contentRange?.split("/");
-    // // @ts-ignore
-    // const fileLength = rangeArr[1];
-
-    // sourceBuffer_audio.addEventListener('updateend', loadSegment);
-    // sourceBuffer_audio.addEventListener("updateend", loadSegment);
-
     // Add buffer on demand, so the key is no need "updateend" even listener? Mind-blowing
     // fetch the first 10s of the audio
     fetchAudioSegment(0);
@@ -76,17 +66,9 @@
     audio.addEventListener("timeupdate", checkBuffer);
     audio.addEventListener("canplay", function () {
       segmentDuration = audio.duration / totalSegments;
-      // audio.play();
     });
     audio.addEventListener("seeking", seek);
   }
-
-  // function loadSegment() {
-  //   if (segNum < maxSegNum) {
-  //     getAudioSegment();
-  //     segNum++;
-  //   }
-  // }
 
   // @ts-ignore
   async function fetchAudioSegment(segmentNumber) {
@@ -98,7 +80,12 @@
       },
     });
     const buf = await res.arrayBuffer();
-    // @ts-ignore
+    const curMode = sourceBuffer_audio.mode;
+    console.log(curMode);
+
+
+    // whatever normally would have called appendBuffer(buffer) can
+    // now just call queue.push(buffer) instead
     sourceBuffer_audio.appendBuffer(buf);
   }
 
@@ -112,41 +99,50 @@
       // @ts-ignore
     } else if (shouldFetchNextSegment(currentSegment)) {
       requestedSegments[currentSegment] = true;
-      console.log("time to fetch next chunk", audio.currentTime);
       fetchAudioSegment(currentSegment);
+      console.log("time to fetch next chunk", audio.currentTime);
     }
   }
 
   // @ts-ignore
   function seek(e) {
-    console.log(e);
     if (mediaSource.readyState === "open") {
       sourceBuffer_audio.abort();
-      console.log(mediaSource.readyState);
+      let currentSegment = getCurrentSegment();
+      requestedSegments[currentSegment-1] = true;
+      fetchAudioSegment(currentSegment-1);
+      sourceBuffer_audio.addEventListener("updateend", () => {
+        if(!requestedSegments[currentSegment]) {
+
+          requestedSegments[currentSegment] = true;
+          fetchAudioSegment(currentSegment);
+          // audio.currentTime = sourceBuffer_audio.buffered.start(sourceBuffer_audio.buffered.length - 1);
+          audio.play();
+        }
+      })
     } else {
       console.log("seek but not open");
-      console.log(mediaSource.readyState);
     }
   }
 
   function getCurrentSegment() {
-    // console.log(audio.currentTime / segmentDuration);
-    // console.log((audio.currentTime / segmentDuration) | 0);
     return ((audio.currentTime / segmentDuration) | 0) + 1;
   }
 
   function haveAllSegments() {
-    // @ts-ignore
     return requestedSegments.every(function (val) {
       return !!val;
     });
   }
 
-  // @ts-ignore
+  /**
+   * @param {number} currentSegment
+   */
   function shouldFetchNextSegment(currentSegment) {
     return (
       // @ts-ignore
-      audio.currentTime > segmentDuration * currentSegment * 0.8 && !requestedSegments[currentSegment]
+      audio.currentTime > segmentDuration * currentSegment * 0.8 &&
+      !requestedSegments[currentSegment]
     );
   }
 
@@ -173,3 +169,9 @@
     <Controls {currentTime} {duration} {audio} />
   {/if}
 </div>
+
+<style>
+  audio {
+    display: none;
+  }
+</style>
