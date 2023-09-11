@@ -21,6 +21,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource-variable/public-sans": "^5.0.9",
 		"@sveltejs/vite-plugin-svelte": "^2.4.5",
 		"svelte-icons": "^2.1.0"
 	}

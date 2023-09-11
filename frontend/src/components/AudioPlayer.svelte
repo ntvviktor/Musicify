@@ -2,6 +2,7 @@
   import { isPlaying, audioPlayer } from "$lib/data";
   import { onMount } from "svelte";
   import Controls from "./Controls.svelte";
+  import "@fontsource-variable/public-sans";
 
   let duration = 0;
   let currentTime = 0;
@@ -59,8 +60,11 @@
     const buf = await res.arrayBuffer();
     sourceBuffer_audio.appendBuffer(buf);
 
-    // Add buffer on demand, so the key is no need "updateend" even listener? Mind-blowing
-    // fetch the first 10s of the audio
+    /**
+   * Add buffer on demand, fetch the first segment of the audio.
+   * No need the "updateend" event but listen to the "timeupdate" instead
+   * Use the | bitwise OR operator to check and fetch the next chunk of audio
+   */
     fetchAudioSegment(0);
     requestedSegments[0] = true;
     audio.addEventListener("timeupdate", checkBuffer);
@@ -70,7 +74,9 @@
     audio.addEventListener("seeking", seek);
   }
 
-  // @ts-ignore
+  /**
+   * @param {number} segmentNumber
+   */
   async function fetchAudioSegment(segmentNumber) {
     //@ts-ignore
     let byterange = metadata.SegmentURL[segmentNumber].MediaRange;
@@ -80,16 +86,12 @@
       },
     });
     const buf = await res.arrayBuffer();
-    const curMode = sourceBuffer_audio.mode;
-    console.log(curMode);
-
-
-    // whatever normally would have called appendBuffer(buffer) can
-    // now just call queue.push(buffer) instead
     sourceBuffer_audio.appendBuffer(buf);
   }
 
-  // @ts-ignore
+  /**
+  * @param {Event} e
+  */
   function checkBuffer(e) {
     let currentSegment = getCurrentSegment();
     if (currentSegment === totalSegments && haveAllSegments()) {
@@ -101,22 +103,29 @@
       requestedSegments[currentSegment] = true;
       fetchAudioSegment(currentSegment);
       console.log("time to fetch next chunk", audio.currentTime);
+    } else if(currentSegment === totalSegments){
+      console.log("end");
     }
   }
 
-  // @ts-ignore
+  /**
+  * @param {Event} e
+  */
   function seek(e) {
     if (mediaSource.readyState === "open") {
       sourceBuffer_audio.abort();
+      /* TODO: Explaination on testing whether the fetch one segment before the currentSegment
+      *   to fire the event "updateend" in order to play the audio
+      *   to avoid ERROR: An attempt was made to use an object that is not, or is no longer, usable 
+      */
       let currentSegment = getCurrentSegment();
       requestedSegments[currentSegment-1] = true;
       fetchAudioSegment(currentSegment-1);
       sourceBuffer_audio.addEventListener("updateend", () => {
-        if(!requestedSegments[currentSegment]) {
-
+        if(!requestedSegments[currentSegment] && currentSegment < totalSegments) {
+          console.log(currentSegment);
           requestedSegments[currentSegment] = true;
           fetchAudioSegment(currentSegment);
-          // audio.currentTime = sourceBuffer_audio.buffered.start(sourceBuffer_audio.buffered.length - 1);
           audio.play();
         }
       })
@@ -153,7 +162,7 @@
   });
 </script>
 
-<div>
+<div class="all">
   <audio
     bind:this={audio}
     bind:duration
@@ -171,6 +180,10 @@
 </div>
 
 <style>
+  .all {
+    font-family: "Public Sans", sans-serif;
+
+  }
   audio {
     display: none;
   }

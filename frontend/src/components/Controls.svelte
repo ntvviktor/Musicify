@@ -1,47 +1,60 @@
 <script>
-  // @ts-nocheck
   import PlayButton from "./PlayButton.svelte";
   import { format } from "$lib/utilities";
   import { audioPlayer } from "$lib/data";
+  /**
+   * @type {HTMLAudioElement}
+   */
   export let audio;
   export let duration = 0;
   export let currentTime = 0;
-  // @ts-ignore
-  let raf = null;
+  // let raf = null;
+  /**
+   * @type {HTMLInputElement}
+   */
   let seekSlider;
+  /**
+   * @type {HTMLDivElement}
+   */
   let audioPlayerContainer;
   const whilePlaying = () => {
-    seekSlider.value = Math.floor(audio.currentTime);
+    seekSlider.value = String(Math.floor(audio.currentTime));
     audioPlayerContainer.style.setProperty(
       "--buffered-width",
-      `${(seekSlider.value / seekSlider.max) * 100}%`
+      `${(Number(seekSlider.value) / Number(seekSlider.max)) * 100}%`
     );
-    raf = requestAnimationFrame(whilePlaying);
+    // raf = requestAnimationFrame(whilePlaying);
   };
 
-  const showRangeProgress = (rangeInput) => {
+  const showRangeProgress = (/** @type {HTMLInputElement} */ rangeInput) => {
     if (rangeInput === seekSlider) {
-      audioPlayerContainer.style.setProperty('--buffered-width', rangeInput.value / rangeInput.max * 100 + '%')
+      audioPlayerContainer.style.setProperty('--buffered-width', Number(rangeInput.value) /Number(rangeInput.max) * 100 + '%')
     }
   };
+  /**
+   * @param {{ target: any; }} e
+   */
   function movePosition(e) {
     showRangeProgress(e.target);
-    if (!audio.paused) {
-      cancelAnimationFrame(raf);
-    }
+    // if (!audio.paused) {
+    //   cancelAnimationFrame(raf);
+    // }
   }
 
   function updatePosition() {
+    // @ts-ignore
     $audioPlayer.currentTime = seekSlider.value;
-    if (!audio.paused) {
-      requestAnimationFrame(whilePlaying);
-    }
+    // if (!audio.paused) {
+    //   requestAnimationFrame(whilePlaying);
+    // }
   }
 
   audio.addEventListener("progress", whilePlaying);
 </script>
 
-<div>
+<div class="control">
+  <span>I Love You So</span>
+  <span >The Walters</span>
   <PlayButton />
   <div class="progress">
     <span class="time">{format(currentTime)}</span>
@@ -63,6 +76,22 @@
 </div>
 
 <style>
+  .control{
+    background-color: rgba(54, 61, 61, 0.234);
+    padding: 2.5rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .progress {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+  }
   .container {
     width: 80%;
     margin: 0 12px;
@@ -101,14 +130,14 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #007db5;
+    background-color: #1a1a1a92;
     cursor: pointer;
   }
   input[type="range"]::-webkit-slider-thumb {
     position: relative;
     -webkit-appearance: none;
     box-sizing: content-box;
-    border: 1px solid #007db5;
+    border: 1px solid #1a1a1a92;
     height: 15px;
     width: 15px;
     border-radius: 50%;
@@ -118,7 +147,7 @@
   }
   input[type="range"]:active::-webkit-slider-thumb {
     transform: scale(1.2);
-    background: #007db5;
+    background: #1a1a1a92;
   }
   input[type="range"]::-moz-range-track {
     width: 100%;
@@ -131,14 +160,14 @@
     );
   }
   input[type="range"]::-moz-range-progress {
-    background-color: #007db5;
+    background-color: #1a1a1a92;
   }
   input[type="range"]::-moz-focus-outer {
     border: 0;
   }
   input[type="range"]::-moz-range-thumb {
     box-sizing: content-box;
-    border: 1px solid #007db5;
+    border: 1px solid #1a1a1a92;
     height: 15px;
     width: 15px;
     border-radius: 50%;
@@ -147,7 +176,7 @@
   }
   input[type="range"]:active::-moz-range-thumb {
     transform: scale(1.2);
-    background: #007db5;
+    background: #1a1a1a92;
   }
   input[type="range"]::-ms-track {
     width: 100%;
@@ -158,7 +187,7 @@
     color: transparent;
   }
   input[type="range"]::-ms-fill-lower {
-    background-color: #007db5;
+    background-color: #1a1a1a92;
   }
   input[type="range"]::-ms-fill-upper {
     background: linear-gradient(
@@ -169,7 +198,7 @@
   }
   input[type="range"]::-ms-thumb {
     box-sizing: content-box;
-    border: 1px solid #007db5;
+    border: 1px solid #1a1a1a92;
     height: 15px;
     width: 15px;
     border-radius: 50%;
@@ -178,6 +207,6 @@
   }
   input[type="range"]:active::-ms-thumb {
     transform: scale(1.2);
-    background: #007db5;
+    background: #1a1a1a92;
   }
 </style>

@@ -14,11 +14,11 @@
 </script>
 {#if $isPlaying === false}
 <button on:click={playAudio} id="play">
-    <Icon icon="gridicons:play"></Icon>
+    <Icon icon="gridicons:play" width="40" color="#00A693"></Icon>
 </button>
 {:else}
 <button on:click={pauseAudio} id="pause">
-    <Icon icon="ic:baseline-pause"></Icon>
+    <Icon icon="ic:baseline-pause" width="40" color="#00A693"></Icon>
 </button>
 {/if}
 
