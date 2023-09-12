@@ -16,7 +16,7 @@ import (
 )
 
 /*
-Require Ffmpeg multimedia framework, Bento4 package installed
+Require Ffmpeg multimedia framework with custom libfdk_aac library, Bento4 package installed
 1. Ffmpeg command to convert flac to aac 256kbs and put into mp4 container
 ffmpeg -i music.flac -c:a libfdk_aac -b:a 256k output.aac
 
