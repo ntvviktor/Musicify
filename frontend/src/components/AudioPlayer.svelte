@@ -22,29 +22,29 @@
    * @type {SourceBuffer}
    */
   let sourceBuffer_audio;
-  let totalSegments = metadata.SegmentURL.length;
   /**
    * @type {boolean[]}
    */
   let requestedSegments = [];
-  let segmentDuration = 0;
-
-  // @ts-ignore
-  let assetURL = "http://127.0.0.1:3000/music/song1";
-
+  let totalSegments = metadata.SegmentURL.length;
   for (let i = 0; i < totalSegments; ++i) requestedSegments[i] = false;
+  let segmentDuration = 0;
+  let songUrl = "http://127.0.0.1:3000/music/song1";
+
   /**
    * @type {HTMLAudioElement}
    */
   let audio;
-  // @ts-ignore
+
   function startup() {
     mediaSource.addEventListener("webkitsourceopen", sourceOpen, false);
     mediaSource.addEventListener("sourceopen", sourceOpen, false);
     audio.src = URL.createObjectURL(mediaSource);
   }
 
-  // @ts-ignore
+  /**
+   * @param {Event} e
+   */
   async function sourceOpen(e) {
     sourceBuffer_audio = mediaSource.addSourceBuffer(
       "audio/mp4; codecs=mp4a.40.2"
@@ -61,10 +61,10 @@
     sourceBuffer_audio.appendBuffer(buf);
 
     /**
-   * Add buffer on demand, fetch the first segment of the audio.
-   * No need the "updateend" event but listen to the "timeupdate" instead
-   * Use the | bitwise OR operator to check and fetch the next chunk of audio
-   */
+     * Add buffer on demand, fetch the first segment of the audio.
+     * No need the "updateend" event but listen to the "timeupdate" instead
+     * Use the | bitwise OR operator to check and fetch the next chunk of audio
+     */
     fetchAudioSegment(0);
     requestedSegments[0] = true;
     audio.addEventListener("timeupdate", checkBuffer);
@@ -80,7 +80,7 @@
   async function fetchAudioSegment(segmentNumber) {
     //@ts-ignore
     let byterange = metadata.SegmentURL[segmentNumber].MediaRange;
-    const res = await fetch("http://127.0.0.1:3000/music/song1", {
+    const res = await fetch(songUrl, {
       headers: {
         range: `bytes=${byterange}`,
       },
@@ -90,8 +90,8 @@
   }
 
   /**
-  * @param {Event} e
-  */
+   * @param {Event} e
+   */
   function checkBuffer(e) {
     let currentSegment = getCurrentSegment();
     if (currentSegment === totalSegments && haveAllSegments()) {
@@ -103,32 +103,35 @@
       requestedSegments[currentSegment] = true;
       fetchAudioSegment(currentSegment);
       console.log("time to fetch next chunk", audio.currentTime);
-    } else if(currentSegment === totalSegments){
+    } else if (currentSegment === totalSegments) {
       console.log("end");
     }
   }
 
   /**
-  * @param {Event} e
-  */
+   * @param {Event} e
+   */
   function seek(e) {
     if (mediaSource.readyState === "open") {
       sourceBuffer_audio.abort();
       /* TODO: Explaination on testing whether the fetch one segment before the currentSegment
-      *   to fire the event "updateend" in order to play the audio
-      *   to avoid ERROR: An attempt was made to use an object that is not, or is no longer, usable 
-      */
+       *   to fire the event "updateend" in order to play the audio
+       *   to avoid ERROR: An attempt was made to use an object that is not, or is no longer, usable
+       */
       let currentSegment = getCurrentSegment();
-      requestedSegments[currentSegment-1] = true;
-      fetchAudioSegment(currentSegment-1);
+      requestedSegments[currentSegment - 1] = true;
+      fetchAudioSegment(currentSegment - 1);
       sourceBuffer_audio.addEventListener("updateend", () => {
-        if(!requestedSegments[currentSegment] && currentSegment < totalSegments) {
+        if (
+          !requestedSegments[currentSegment] &&
+          currentSegment < totalSegments
+        ) {
           console.log(currentSegment);
           requestedSegments[currentSegment] = true;
           fetchAudioSegment(currentSegment);
           audio.play();
         }
-      })
+      });
     } else {
       console.log("seek but not open");
     }
@@ -149,9 +152,7 @@
    */
   function shouldFetchNextSegment(currentSegment) {
     return (
-      // @ts-ignore
-      audio.currentTime > segmentDuration * currentSegment * 0.8 &&
-      !requestedSegments[currentSegment]
+      audio.currentTime > segmentDuration * currentSegment * 0.8 && !requestedSegments[currentSegment]
     );
   }
 
@@ -182,7 +183,6 @@
 <style>
   .all {
     font-family: "Public Sans", sans-serif;
-
   }
   audio {
     display: none;

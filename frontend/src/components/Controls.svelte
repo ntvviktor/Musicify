@@ -77,7 +77,7 @@
 
 <style>
   .control{
-    background-color: rgba(54, 61, 61, 0.234);
+    background-color: #2c303333;
     padding: 2.5rem;
     border-radius: 15px;
     display: flex;
@@ -85,6 +85,7 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
   .progress {
     display: flex;

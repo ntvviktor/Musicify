@@ -7,8 +7,6 @@
   let metadata;
 
   onMount(async() => {
-    // mediaSource = new MediaSource();
-    // startup();
     const res = await fetch("http://127.0.0.1:3000/metadata");
     const content = await res.json();
     metadata = content;
@@ -29,10 +27,13 @@
   }
 
   .main {
-    top:50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: absolute;               
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>
