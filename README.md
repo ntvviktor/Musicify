@@ -22,3 +22,6 @@ npm install
 npm run dev
 go to localhost
 ```
+
+Notes TODO: seeking audio feature can becomes buggy and might not work properly.
+
