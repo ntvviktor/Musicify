@@ -9,7 +9,7 @@ The project uses Svelte for the frontend and Golang for backend:
 3. Then in the frontend, fetch chunks of audio data in byte-range specified at the request headers.
 
 ### Inspiration
-Credit inspiration to this [demo](https://github.com/nickdesaulniers/netfix/blob/gh-pages/demo/).
+Credit inspiration to this [github repo](https://github.com/nickdesaulniers/netfix/blob/gh-pages/demo/).
 
 ### Demo
 Clone this project
