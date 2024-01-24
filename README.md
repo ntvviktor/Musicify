@@ -22,6 +22,6 @@ npm install
 npm run dev
 ```
 The demo looks like this
-![[https://github.com/ntvviktor/Musicify/blob/main/demo.png]]
+![image](https://github.com/ntvviktor/Musicify/blob/main/demo.png)
 Notes TODO: seeking audio feature can becomes buggy and might not work properly.
 
