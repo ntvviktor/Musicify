@@ -20,8 +20,8 @@ go run cmd/api/main.go
 cd frontend
 npm install
 npm run dev
-go to localhost
 ```
-
+The demo looks like this
+![[https://github.com/ntvviktor/Musicify/blob/main/demo.png]]
 Notes TODO: seeking audio feature can becomes buggy and might not work properly.
 
