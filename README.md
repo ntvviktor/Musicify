@@ -1,7 +1,7 @@
-# SpotifyClone Person Project
+# Musicify Person Project
 
 ### Purpose
-This project aims for simulate some feature of streaming in Spotify app.
+This project aims for simulate some feature of streaming in Spotify app: stream music with http byte-range request.
 ### How it works
 The project uses Svelte for the frontend and Golang for backend:
 1. Transcode audio using Ffmpeg command, use library [libfdk_aac](https://en.wikipedia.org/wiki/Fraunhofer_FDK_AAC) for higher quality encoder.
